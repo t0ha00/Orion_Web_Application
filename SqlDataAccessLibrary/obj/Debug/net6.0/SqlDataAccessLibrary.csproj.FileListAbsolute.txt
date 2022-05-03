@@ -1,0 +1,12 @@
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\bin\Debug\net6.0\SqlDataAccessLibrary.deps.json
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\bin\Debug\net6.0\SqlDataAccessLibrary.dll
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\bin\Debug\net6.0\SqlDataAccessLibrary.pdb
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\obj\Debug\net6.0\SqlDataAccessLibrary.csproj.AssemblyReference.cache
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\obj\Debug\net6.0\SqlDataAccessLibrary.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\obj\Debug\net6.0\SqlDataAccessLibrary.AssemblyInfoInputs.cache
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\obj\Debug\net6.0\SqlDataAccessLibrary.AssemblyInfo.cs
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\obj\Debug\net6.0\SqlDataAccessLibrary.csproj.CoreCompileInputs.cache
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\obj\Debug\net6.0\SqlDataAccessLibrary.dll
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\obj\Debug\net6.0\refint\SqlDataAccessLibrary.dll
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\obj\Debug\net6.0\SqlDataAccessLibrary.pdb
+D:\Projects\Orion_Web_Application\SqlDataAccessLibrary\obj\Debug\net6.0\ref\SqlDataAccessLibrary.dll
