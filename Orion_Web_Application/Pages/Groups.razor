@@ -1,0 +1,57 @@
+﻿@page "/groups"
+
+
+@using SqlDataAccessLibrary.Data
+@using SqlDataAccessLibrary.Models
+
+@inject ISubdivisionData _subdivisions;
+@inject IEmployeeData _employees;
+
+@if (subdivisions == null )
+{
+    <p><el>Загрузка...</el></p>
+}
+else
+{
+    <div class="div1">
+        <div class="div2">
+            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValue(i)">
+            @foreach(var subdivision in subdivisions)
+            {
+                <MatOption TValue="int" Value="@subdivision.Код">@subdivision.Имя</MatOption>
+            }
+
+            </MatSelect>
+            <table>
+                <tr>
+                    @foreach (var emploee in employees)
+                    {
+                        <td>@emploee.ФИО</td>
+                    }
+                </tr>
+            </table>
+        </div>
+    </div>
+}
+<p>@subdivisionId</p>
+        
+@code
+{
+    int subdivisionId = 1;
+    private List<SubdivisionModel>? subdivisions;
+    private List<EmployeeModel>? employees;
+
+    protected override async Task OnInitializedAsync()
+    {
+        subdivisions = await _subdivisions.GetAllSubdivisions();
+        employees = await _employees.GetEmployeeByCodeSubdivision(subdivisionId);
+    }
+
+    public async void OnChangeValue(int i)
+    {
+        subdivisionId = i;
+        employees.Clear();
+        employees = await _employees.GetEmployeeByCodeSubdivision(subdivisionId);
+        StateHasChanged();
+    }
+}  

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Orion_Web_Application.Areas.Identity;
 using Orion_Web_Application.Data;
 using SqlDataAccessLibrary;
+using SqlDataAccessLibrary.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,8 @@ builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuth
 builder.Services.AddMatBlazor();
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddTransient<IStudentsData, StudentsData>();
+builder.Services.AddTransient<ISubdivisionData, SubdivisionData>();
+builder.Services.AddTransient<IEmployeeData, EmployeeData>();
 
 
 
