@@ -29,6 +29,7 @@ builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddTransient<IStudentsData, StudentsData>();
 builder.Services.AddTransient<ISubdivisionData, SubdivisionData>();
 builder.Services.AddTransient<IEmployeeData, EmployeeData>();
+builder.Services.AddTransient<IMainGroupsTableData, MainGroupsTableData>();
 
 
 

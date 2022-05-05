@@ -6,40 +6,103 @@
 
 @inject ISubdivisionData _subdivisions;
 @inject IEmployeeData _employees;
+@inject IMainGroupsTableData _groups;
 
-@if (subdivisions == null )
+@if (subdivisions == null &&  employees == null)
 {
-    <p><el>Загрузка...</el></p>
+    <div class="loading-spiner"></div>
 }
-else
+else if (subdivisions?.Count > 0 && employees?.Count == 0)
 {
     <div class="div1">
-        <div class="div2" style="max-width: 272px;">
+        <div class="div2" style="max-width: 200px;">
             <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValue(i)" Value="@subdivisionId">
                 @foreach(var subdivision in subdivisions)
                 {
                     <MatOption TValue="int" Value="@subdivision.Код">@subdivision.Имя</MatOption>
                 }
             </MatSelect>
-            <MatTable Items="employees" AllowSelection="true" ShowPaging="false">
-                <MatTableHeader>
-                    <th>ФИО</th>
-                </MatTableHeader>
-                <MatTableRow>
-                    <td>@context.ФИО</td>
-                </MatTableRow>
-            </MatTable>
+            </div>
+</div>
+}
+else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count == 0)
+{
+    <div class="div1">
+        <div class="div2" style="max-width: 200px;">
+            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValue(i)" Value="@subdivisionId">
+                @foreach(var subdivision in subdivisions)
+                {
+                    <MatOption TValue="int" Value="@subdivision.Код">@subdivision.Имя</MatOption>
+                }
+            </MatSelect>
+            <MatTable Items="employees" AllowSelection="true" ShowPaging="false" SelectionChanged="SelectionWorkerChanged">
+                    <MatTableHeader>
+                        <th style="width:200px">ФИО</th>
+                        </MatTableHeader>
+                    <MatTableRow>
+                        <td style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</td>
+                    </MatTableRow>
+                </MatTable>
+            </div>
+
         </div>
-    </div>
+}
+else
+{
+    <div class="div1">
+        <div class="div2" style="max-width: 200px;">
+            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValue(i)" Value="@subdivisionId">
+                @foreach(var subdivision in subdivisions)
+                {
+                    <MatOption TValue="int" Value="@subdivision.Код">@subdivision.Имя</MatOption>
+                }
+            </MatSelect>
+            <MatTable Items="employees" AllowSelection="true" ShowPaging="false" SelectionChanged="SelectionWorkerChanged">
+                    <MatTableHeader>
+                        <th style="width:200px">ФИО</th>
+                        </MatTableHeader>
+                    <MatTableRow>
+                        <td style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</td>
+                    </MatTableRow>
+                </MatTable>
+            </div>
+            <div class="div2">
+                <MatTable Items="groups" AllowSelection="false" ShowPaging="false">
+                    <MatTableHeader>
+                        <th>id</th>
+                        <th>Название группы</th>
+                        <th>Учен</th>
+                        <th>Начало</th>
+                        <th>Практ</th>
+                        <th>Окончание</th>
+                        <th>Ч.тр.</th>
+                        <th>Ч.пр.</th>
+                        <th>Тип</th>
+                        <th>К закр.</th>
+                        </MatTableHeader>
+                    <MatTableRow>
+                        <td>@context.id</td>
+                        <td>@context.Программа_обучения</td>
+                        <td>@context.Учен</td>
+                        <td>@context.Нач</td>
+                        <td>@context.Практ</td>
+                        <td>@context.Окончание</td>
+                        <td>@context.Теор</td>
+                        <td>@context.Час_практики</td>
+                        <td>привет</td>
+                    </MatTableRow>
+                </MatTable>
+            </div>
+        </div>
 }
 
-        
 @code
 {
-    int subdivisionId = 2;
-    
+    int subdivisionId = 4;
+
     private List<SubdivisionModel>? subdivisions;
     private List<EmployeeModel>? employees;
+    private List<MainGroupsTableInfoModel>? groups;
 
     protected override async Task OnInitializedAsync()
     {
@@ -52,6 +115,13 @@ else
         subdivisionId = i;
         employees?.Clear();
         employees = await _employees.GetEmployeeByCodeSubdivision(subdivisionId);
+        StateHasChanged();
+    }
+
+    public async void SelectionWorkerChanged(object row)
+    {
+        groups?.Clear();
+        groups = await _groups.getAllGroupsForMainTable(((EmployeeModel)row).Код);
         StateHasChanged();
     }
 }  

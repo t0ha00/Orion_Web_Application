@@ -10,11 +10,15 @@
         "projectUniqueName": "D:\\Projects\\Orion_Web_Application\\Orion_Web_Application\\Orion_Web_Application.csproj",
         "projectName": "Orion_Web_Application",
         "projectPath": "D:\\Projects\\Orion_Web_Application\\Orion_Web_Application\\Orion_Web_Application.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\Anton\\.nuget\\packages\\",
         "outputPath": "D:\\Projects\\Orion_Web_Application\\Orion_Web_Application\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\Programs\\MS Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Anton\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -97,11 +101,15 @@
         "projectUniqueName": "D:\\Projects\\Orion_Web_Application\\SqlDataAccessLibrary\\SqlDataAccessLibrary.csproj",
         "projectName": "SqlDataAccessLibrary",
         "projectPath": "D:\\Projects\\Orion_Web_Application\\SqlDataAccessLibrary\\SqlDataAccessLibrary.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\Anton\\.nuget\\packages\\",
         "outputPath": "D:\\Projects\\Orion_Web_Application\\SqlDataAccessLibrary\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\Programs\\MS Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Anton\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
