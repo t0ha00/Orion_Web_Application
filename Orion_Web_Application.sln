@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion_Web_Application", "Orion_Web_Application\Orion_Web_Application.csproj", "{BD26B347-53B6-431C-B33D-188BFD10E1C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orion_Web_Application", "Orion_Web_Application\Orion_Web_Application.csproj", "{BD26B347-53B6-431C-B33D-188BFD10E1C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlDataAccessLibrary", "SqlDataAccessLibrary\SqlDataAccessLibrary.csproj", "{176D0516-60CF-4902-8988-0E59F51F824F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlDataAccessLibrary", "SqlDataAccessLibrary\SqlDataAccessLibrary.csproj", "{176D0516-60CF-4902-8988-0E59F51F824F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

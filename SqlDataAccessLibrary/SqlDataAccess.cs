@@ -23,7 +23,7 @@ namespace SqlDataAccessLibrary
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
                 var data = await connection.QueryAsync<T>(sql, parameters);
-
+                
                 return data.ToList();
             }
         }

@@ -4,11 +4,13 @@
 @using SqlDataAccessLibrary.Data
 @using SqlDataAccessLibrary.Models
 
+@inject NavigationManager NavigationManager;
 @inject ISubdivisionData _subdivisions;
 @inject IEmployeeData _employees;
 @inject IMainGroupsTableData _groups;
 
-@if (subdivisions == null &&  employees == null)
+
+@if (employees == null && subdivisions == null)
 {
     <div class="loading-spiner"></div>
 }
@@ -16,7 +18,7 @@ else if (subdivisions?.Count > 0 && employees?.Count == 0)
 {
     <div class="div1">
         <div class="div2" style="max-width: 200px;">
-            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValue(i)" Value="@subdivisionId">
+            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
                 @foreach(var subdivision in subdivisions)
                 {
                     <MatOption TValue="int" Value="@subdivision.Код">@subdivision.Имя</MatOption>
@@ -25,11 +27,11 @@ else if (subdivisions?.Count > 0 && employees?.Count == 0)
             </div>
 </div>
 }
-else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count == 0)
+else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups == null)
 {
     <div class="div1">
         <div class="div2" style="max-width: 200px;">
-            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValue(i)" Value="@subdivisionId">
+            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
                 @foreach(var subdivision in subdivisions)
                 {
                     <MatOption TValue="int" Value="@subdivision.Код">@subdivision.Имя</MatOption>
@@ -47,11 +49,11 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count == 0)
 
         </div>
 }
-else
+else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
 {
-    <div class="div1">
-        <div class="div2" style="max-width: 200px;">
-            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValue(i)" Value="@subdivisionId">
+    <div class="div1" style="display:flex">
+        <div class="div2" style="max-width: 200px; margin-top:8px;">
+            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
                 @foreach(var subdivision in subdivisions)
                 {
                     <MatOption TValue="int" Value="@subdivision.Код">@subdivision.Имя</MatOption>
@@ -66,11 +68,11 @@ else
                     </MatTableRow>
                 </MatTable>
             </div>
-            <div class="div2">
-                <MatTable Items="groups" AllowSelection="false" ShowPaging="false">
+            <div class="div2" style="margin-left:10px;">
+                <MatTable Items="groups" AllowSelection="true" ShowPaging="false" OnRowDbClick="OpenGroup">
                     <MatTableHeader>
                         <th>id</th>
-                        <th>Название группы</th>
+                        <th style="min-width:400px">Название группы</th>
                         <th>Учен</th>
                         <th>Начало</th>
                         <th>Практ</th>
@@ -78,7 +80,6 @@ else
                         <th>Ч.тр.</th>
                         <th>Ч.пр.</th>
                         <th>Тип</th>
-                        <th>К закр.</th>
                         </MatTableHeader>
                     <MatTableRow>
                         <td>@context.id</td>
@@ -89,7 +90,7 @@ else
                         <td>@context.Окончание</td>
                         <td>@context.Теор</td>
                         <td>@context.Час_практики</td>
-                        <td>привет</td>
+                        <td>@context.Тип</td>
                     </MatTableRow>
                 </MatTable>
             </div>
@@ -110,18 +111,30 @@ else
         employees = await _employees.GetEmployeeByCodeSubdivision(subdivisionId);
     }
 
-    public async void OnChangeValue(int i)
+    public async void OnChangeValueSubdivision(int i)
     {
         subdivisionId = i;
         employees?.Clear();
         employees = await _employees.GetEmployeeByCodeSubdivision(subdivisionId);
-        StateHasChanged();
+        this.StateHasChanged();
     }
 
     public async void SelectionWorkerChanged(object row)
     {
-        groups?.Clear();
-        groups = await _groups.getAllGroupsForMainTable(((EmployeeModel)row).Код);
-        StateHasChanged();
+        if (row != null)
+        {
+            groups?.Clear();
+            groups = await _groups.getAllGroupsForMainTable(((EmployeeModel)row).Код);
+            this.StateHasChanged();  
+        }
+    }
+
+    public void OpenGroup(object item)
+    {
+        var group = item as MainGroupsTableInfoModel;
+        if (group != null)
+        {
+            NavigationManager.NavigateTo("/groups/" + group.id);
+        }
     }
 }  
