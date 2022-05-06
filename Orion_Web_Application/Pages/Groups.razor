@@ -1,13 +1,28 @@
 ﻿@page "/groups"
 
-
 @using SqlDataAccessLibrary.Data
 @using SqlDataAccessLibrary.Models
+
+
 
 @inject NavigationManager NavigationManager;
 @inject ISubdivisionData _subdivisions;
 @inject IEmployeeData _employees;
 @inject IMainGroupsTableData _groups;
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+</style>
 
 
 @if (employees == null && subdivisions == null)
@@ -18,12 +33,12 @@ else if (subdivisions?.Count > 0 && employees?.Count == 0)
 {
     <div class="div1">
         <div class="div2" style="max-width: 200px;">
-            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
+            <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
                 @foreach(var subdivision in subdivisions)
                 {
-                    <MatOption TValue="int" Value="@subdivision.Код">@subdivision.Имя</MatOption>
+                    <MudSelectItem T="int" Value="@subdivision.Код">@subdivision.Имя</MudSelectItem>
                 }
-            </MatSelect>
+            </MudSelect>
             </div>
 </div>
 }
@@ -31,20 +46,20 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups == null)
 {
     <div class="div1">
         <div class="div2" style="max-width: 200px;">
-            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
+            <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
                 @foreach(var subdivision in subdivisions)
                 {
-                    <MatOption TValue="int" Value="@subdivision.Код">@subdivision.Имя</MatOption>
+                    <MudSelectItem T="int" Value="@subdivision.Код">@subdivision.Имя</MudSelectItem>
                 }
-            </MatSelect>
-            <MatTable Items="employees" AllowSelection="true" ShowPaging="false" SelectionChanged="SelectionWorkerChanged">
-                    <MatTableHeader>
-                        <th style="width:200px">ФИО</th>
-                        </MatTableHeader>
-                    <MatTableRow>
-                        <td style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</td>
-                    </MatTableRow>
-                </MatTable>
+            </MudSelect>
+            <MudTable Items="employees" Hover="true" @ref="mudTable" Breakpoint="Breakpoint.Sm" OnRowClick="SelectionWorkerChanged" T="EmployeeModel" RowClassFunc="@SelectedRowClassFunc">
+                    <HeaderContent>
+                        <MudTh style="width:200px">ФИО</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="ФИО" style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</MudTd>
+                    </RowTemplate>
+                </MudTable>
             </div>
 
         </div>
@@ -53,46 +68,60 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
 {
     <div class="div1" style="display:flex">
         <div class="div2" style="max-width: 200px; margin-top:8px;">
-            <MatSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
+            <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
                 @foreach(var subdivision in subdivisions)
                 {
-                    <MatOption TValue="int" Value="@subdivision.Код">@subdivision.Имя</MatOption>
+                    <MudSelectItem TValue="int" Value="@subdivision.Код">@subdivision.Имя</MudSelectItem>
                 }
-            </MatSelect>
-            <MatTable Items="employees" AllowSelection="true" ShowPaging="false" SelectionChanged="SelectionWorkerChanged">
-                    <MatTableHeader>
-                        <th style="width:200px">ФИО</th>
-                        </MatTableHeader>
-                    <MatTableRow>
-                        <td style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</td>
-                    </MatTableRow>
-                </MatTable>
+            </MudSelect>
+            <MudTable Items="employees" Hover="true" @ref="mudTable" Breakpoint="Breakpoint.Sm" OnRowClick="SelectionWorkerChanged" T="EmployeeModel" RowClassFunc="@SelectedRowClassFunc">
+                <HeaderContent>
+                    <MudTh style="width:200px">ФИО</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="ФИО" style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</MudTd>
+                </RowTemplate>
+            </MudTable>
             </div>
-            <div class="div2" style="margin-left:10px;">
-                <MatTable Items="groups" AllowSelection="true" ShowPaging="false" OnRowDbClick="OpenGroup">
-                    <MatTableHeader>
-                        <th>id</th>
-                        <th style="min-width:400px">Название группы</th>
-                        <th>Учен</th>
-                        <th>Начало</th>
-                        <th>Практ</th>
-                        <th>Окончание</th>
-                        <th>Ч.тр.</th>
-                        <th>Ч.пр.</th>
-                        <th>Тип</th>
-                        </MatTableHeader>
-                    <MatTableRow>
-                        <td>@context.id</td>
-                        <td>@context.Программа_обучения</td>
-                        <td>@context.Учен</td>
-                        <td>@context.Нач</td>
-                        <td>@context.Практ</td>
-                        <td>@context.Окончание</td>
-                        <td>@context.Теор</td>
-                        <td>@context.Час_практики</td>
-                        <td>@context.Тип</td>
-                    </MatTableRow>
-                </MatTable>
+            <div class="div2">
+                <MudTable Items="groups" Hover="true" OnRowClick="OpenGroup" T="MainGroupsTableInfoModel" FixedHeader="true" Height="600px">
+                    <HeaderContent>
+                        <MudTh>Id</MudTh>
+                        <MudTh>Название группы</MudTh>
+                        <MudTh>Учен</MudTh>
+                        <MudTh>Начало</MudTh>
+                        <MudTh>Практ</MudTh>
+                        <MudTh>Окончание</MudTh>
+                        <MudTh>Ч.тр.</MudTh>
+                        <MudTh>Ч.пр.</MudTh>
+                        <MudTh>Тип</MudTh>
+                        </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Id">@context.id</MudTd>
+                        <MudTd DataLabel="Название группы">@context.Программа_обучения</MudTd>
+                        <MudTd DataLabel="Учен">@context.Учен</MudTd>
+                        <MudTd DataLabel="Начало">@context.Нач</MudTd>
+                        <MudTd DataLabel="Практ">@context.Практ</MudTd>
+                        <MudTd DataLabel="Окончание">@context.Окончание</MudTd>
+                        <MudTd DataLabel="Ч.тр.">@context.Теор</MudTd>
+                        <MudTd DataLabel="Ч.пр.">@context.Час_практики</MudTd>
+                        <MudTd DataLabel="Тип">@context.Тип</MudTd>
+                    </RowTemplate>
+                    <FooterContent>
+                        <MudTd>Id</MudTd>
+                        <MudTd>Название группы</MudTd>
+                        <MudTd>Учен</MudTd>
+                        <MudTd>Начало</MudTd>
+                        <MudTd>Практ</MudTd>
+                        <MudTd>Окончание</MudTd>
+                        <MudTd>Ч.тр.</MudTd>
+                        <MudTd>Ч.пр.</MudTd>
+                        <MudTd>Тип</MudTd>
+                    </FooterContent>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                </MudTable>
             </div>
         </div>
 }
@@ -100,7 +129,9 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
 @code
 {
     int subdivisionId = 4;
+    private int selectedRowNumber = -1;
 
+    private MudTable<EmployeeModel> mudTable;
     private List<SubdivisionModel>? subdivisions;
     private List<EmployeeModel>? employees;
     private List<MainGroupsTableInfoModel>? groups;
@@ -111,6 +142,24 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
         employees = await _employees.GetEmployeeByCodeSubdivision(subdivisionId);
     }
 
+    private string SelectedRowClassFunc(EmployeeModel employee, int rowNum)
+    {
+        if (selectedRowNumber == rowNum)
+        {
+            selectedRowNumber = -1;
+            return string.Empty;
+        }
+        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(employee))
+        {
+            selectedRowNumber = rowNum;
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
     public async void OnChangeValueSubdivision(int i)
     {
         subdivisionId = i;
@@ -119,19 +168,20 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
         this.StateHasChanged();
     }
 
-    public async void SelectionWorkerChanged(object row)
+    public async void SelectionWorkerChanged(TableRowClickEventArgs<EmployeeModel> args)
     {
-        if (row != null)
+        if (args != null)
         {
             groups?.Clear();
-            groups = await _groups.getAllGroupsForMainTable(((EmployeeModel)row).Код);
+            
+            groups = await _groups.getAllGroupsForMainTable(args.Item.Код);
             this.StateHasChanged();  
         }
     }
 
-    public void OpenGroup(object item)
+    public void OpenGroup(TableRowClickEventArgs<MainGroupsTableInfoModel> args)
     {
-        var group = item as MainGroupsTableInfoModel;
+        var group = args.Item as MainGroupsTableInfoModel;
         if (group != null)
         {
             NavigationManager.NavigateTo("/groups/" + group.id);

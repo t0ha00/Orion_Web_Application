@@ -1,4 +1,3 @@
-using MatBlazor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -9,6 +8,7 @@ using Orion_Web_Application.Areas.Identity;
 using Orion_Web_Application.Data;
 using SqlDataAccessLibrary;
 using SqlDataAccessLibrary.Data;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +24,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 
 //My Services
-builder.Services.AddMatBlazor();
+builder.Services.AddMudServices();
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddTransient<IStudentsData, StudentsData>();
 builder.Services.AddTransient<ISubdivisionData, SubdivisionData>();

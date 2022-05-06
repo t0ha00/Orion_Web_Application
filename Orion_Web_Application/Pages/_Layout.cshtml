@@ -12,10 +12,14 @@
     <link href="css/site.css" rel="stylesheet" />
     <link href="Orion_Web_Application.styles.css" rel="stylesheet" />
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
 </head>
 <body>
     @RenderBody()
-
+    <MudThemeProvider/>
+    <MudDialogProvider/>
+    <MudSnackbarProvider/>
     <div id="blazor-error-ui">
         <environment include="Staging,Production">
             Произошла ошибка. Это приложение может больше не отвечать до перезагрузки.
@@ -29,4 +33,5 @@
 
     <script src="_framework/blazor.server.js"></script>
 </body>
+<script src="_content/MudBlazor/MudBlazor.min.js"></script>
 </html>
