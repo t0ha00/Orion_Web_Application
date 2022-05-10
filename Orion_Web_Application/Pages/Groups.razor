@@ -2,6 +2,8 @@
 
 @using SqlDataAccessLibrary.Data
 @using SqlDataAccessLibrary.Models
+@using MudBlazor.Services
+@implements IAsyncDisposable
 
 @inject NavigationManager NavigationManager;
 @inject ISubdivisionData _subdivisions;
@@ -29,9 +31,9 @@
 }
 else if (subdivisions?.Count > 0 && employees?.Count == 0)
 {
-    <MudPaper>
-        <MudContainer Style="max-width: 200px;">
-            <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
+    <MudPaper Style="max-width:200px;">
+        <MudContainer Style="max-width:200px;">
+            <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId" Style="width:200px; max-width:200px;">
                 @foreach(var subdivision in subdivisions)
                 {
                     <MudSelectItem T="int" Value="@subdivision.Код">@subdivision.Имя</MudSelectItem>
@@ -43,49 +45,66 @@ else if (subdivisions?.Count > 0 && employees?.Count == 0)
 else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups == null)
 {
     <MudPaper>
-        <MudContainer Style="max-width: 200px; max-height:100%">
-            <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
+        <div style="display:inline-flex;">
+            <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId" Style="width:200px; max-width:200px; display:flex;">
                 @foreach(var subdivision in subdivisions)
                 {
                     <MudSelectItem T="int" Value="@subdivision.Код">@subdivision.Имя</MudSelectItem>
                 }
             </MudSelect>
             <br>
-            <MudTable Items="employees" Hover="true" @ref="mudTable" Breakpoint="Breakpoint.Sm" OnRowClick="SelectionWorkerChanged" T="EmployeeModel" RowClassFunc="@SelectedRowClassFunc"
-                    FixedHeader="true" Height="100%">
+            <MudTable Items="employees" Hover="true" @ref="mudTable" OnRowClick="SelectionWorkerChanged" T="EmployeeModel" RowClassFunc="@SelectedRowClassFunc" Style="max-width:350px;"
+                    FixedHeader="true" Height="@((height - 75) + "px")">
                     <HeaderContent>
-                        <MudTh style="width:200px">ФИО</MudTh>
+                        <MudTh>ФИО</MudTh>
                     </HeaderContent>
                     <RowTemplate>
-                        <MudTd DataLabel="ФИО" style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</MudTd>
+                        <MudTd DataLabel="ФИО" Style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</MudTd>
                     </RowTemplate>
                 </MudTable>
-            </MudContainer>
+            </div>
 
         </MudPaper>
 }
 else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
 {
-    <div class="div1" style="display:flex">
-        <div class="div2" style="max-width: 200px; margin-top:8px;">
-            <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
+    <MudPaper>
+        <MudDrawer @bind-Open="@open" Width="300px" Height="100%" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
+            <MudDrawerHeader>
+                <MudText>Свойста группы @choosenGroup</MudText>
+            </MudDrawerHeader>
+            <MudNavMenu>
+                <MudNavLink Href=@("/group/" + choosenGroup)>Общее</MudNavLink>
+            </MudNavMenu>
+        </MudDrawer>
+        <MudStack Row="true">
+            <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId" Style="width:100px;">
                 @foreach(var subdivision in subdivisions)
                 {
-                    <MudSelectItem TValue="int" Value="@subdivision.Код">@subdivision.Имя</MudSelectItem>
+                    <MudSelectItem T="int" Value="@subdivision.Код">@subdivision.Имя</MudSelectItem>
                 }
             </MudSelect>
-            <MudTable Items="employees" Hover="true" @ref="mudTable" Breakpoint="Breakpoint.Sm" OnRowClick="SelectionWorkerChanged" T="EmployeeModel" RowClassFunc="@SelectedRowClassFunc" 
-                    FixedHeader="true" Height="available">
+            <MudTable Items="employees" Hover="true" @ref="mudTable" OnRowClick="SelectionWorkerChanged" T="EmployeeModel" RowClassFunc="@SelectedRowClassFunc" Style="width:350px;"
+                    FixedHeader="true" Height="@((height - 75) + "px")">
                 <HeaderContent>
-                    <MudTh style="width:200px">ФИО</MudTh>
+                    <MudTh Style="width:200px">ФИО</MudTh>
                 </HeaderContent>
                 <RowTemplate>
-                    <MudTd DataLabel="ФИО" style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</MudTd>
+                    <MudTd DataLabel="ФИО" Style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</MudTd>
                 </RowTemplate>
             </MudTable>
-            </div>
-            <div class="div2">
-                <MudTable Items="groups" Hover="true" OnRowClick="OpenGroup" T="MainGroupsTableInfoModel" FixedHeader="true" FixedFooter="true" Height="available">
+                <MudTable Items="groups" Hover="true" OnRowClick="OpenGroup" T="MainGroupsTableInfoModel" FixedHeader="true" Height="@((height - 130) + "px")">
+                    <ColGroup>
+                        <col style="width: 60px;"/>
+                        <col style="width: 50%;"/>
+                        <col/>
+                        <col/>
+                        <col/>
+                        <col/>
+                        <col/>
+                        <col/>
+                        <col/>
+                    </ColGroup>
                     <HeaderContent>
                         <MudTh>Id</MudTh>
                         <MudTh>Название группы</MudTh>
@@ -108,35 +127,25 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
                         <MudTd DataLabel="Ч.пр.">@context.Час_практики</MudTd>
                         <MudTd DataLabel="Тип">@context.Тип</MudTd>
                     </RowTemplate>
-                    <FooterContent>
-                        <MudTd>Id</MudTd>
-                        <MudTd>Название группы</MudTd>
-                        <MudTd>Учен</MudTd>
-                        <MudTd>Начало</MudTd>
-                        <MudTd>Практ</MudTd>
-                        <MudTd>Окончание</MudTd>
-                        <MudTd>Ч.тр.</MudTd>
-                        <MudTd>Ч.пр.</MudTd>
-                        <MudTd>Тип</MudTd>
-                    </FooterContent>
                     <PagerContent>
                         <MudTablePager PageSizeOptions="new int[]{50, 100}" />
                     </PagerContent>
                 </MudTable>
-            </div>
-        </div>
+            </MudStack>
+        </MudPaper>
 }
 
 @code
 {
-    int subdivisionId = 4;
+    int subdivisionId = 2;
     private int selectedRowNumber = -1;
+    int choosenGroup;
 
     private MudTable<EmployeeModel>? mudTable;
     private List<SubdivisionModel>? subdivisions;
     private List<EmployeeModel>? employees;
     private List<MainGroupsTableInfoModel>? groups;
-    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -175,7 +184,7 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
         if (args != null)
         {
             groups?.Clear();
-            
+
             groups = await _groups.getAllGroupsForMainTable(args.Item.Код);
             this.StateHasChanged();  
         }
@@ -186,7 +195,53 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
         var group = args.Item as MainGroupsTableInfoModel;
         if (group != null)
         {
-            NavigationManager.NavigateTo("/groups/" + group.id);
+            choosenGroup = group.id;
+            OpenDrawer(Anchor.End);
         }
+    }
+
+    //Размеры окна 
+
+    [Inject] IResizeService ResizeService { get; set; }
+
+    int width = 0;
+    int height = 0;
+
+	private Guid _subscriptionId;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+			_subscriptionId = await ResizeService.Subscribe((size) =>
+			{
+				width = size.Width;
+				height = size.Height;
+				InvokeAsync(StateHasChanged);
+			}, new ResizeOptions
+			{
+				ReportRate = 50,
+				NotifyOnBreakpointOnly = false,
+			});
+
+            var size = await ResizeService.GetBrowserWindowSize();
+            height = size.Height;
+            width = size.Width;
+            StateHasChanged();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public async ValueTask DisposeAsync() => await ResizeService.Unsubscribe(_subscriptionId);
+
+    //Вылезающая менюшка
+
+    bool open;
+    Anchor anchor;
+    void OpenDrawer(Anchor anchor)
+    {
+        open = true;
+        this.anchor = anchor;
     }
 }  
