@@ -3,8 +3,6 @@
 @using SqlDataAccessLibrary.Data
 @using SqlDataAccessLibrary.Models
 
-
-
 @inject NavigationManager NavigationManager;
 @inject ISubdivisionData _subdivisions;
 @inject IEmployeeData _employees;
@@ -27,32 +25,34 @@
 
 @if (employees == null && subdivisions == null)
 {
-    <div class="loading-spiner"></div>
+    <div class="loading-spinner"></div>
 }
 else if (subdivisions?.Count > 0 && employees?.Count == 0)
 {
-    <div class="div1">
-        <div class="div2" style="max-width: 200px;">
+    <MudPaper>
+        <MudContainer Style="max-width: 200px;">
             <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
                 @foreach(var subdivision in subdivisions)
                 {
                     <MudSelectItem T="int" Value="@subdivision.Код">@subdivision.Имя</MudSelectItem>
                 }
             </MudSelect>
-            </div>
-</div>
+        </MudContainer>
+    </MudPaper>
 }
 else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups == null)
 {
-    <div class="div1">
-        <div class="div2" style="max-width: 200px;">
+    <MudPaper>
+        <MudContainer Style="max-width: 200px; max-height:100%">
             <MudSelect Label="Подразделение" ValueChanged="(int i) => OnChangeValueSubdivision(i)" Value="@subdivisionId">
                 @foreach(var subdivision in subdivisions)
                 {
                     <MudSelectItem T="int" Value="@subdivision.Код">@subdivision.Имя</MudSelectItem>
                 }
             </MudSelect>
-            <MudTable Items="employees" Hover="true" @ref="mudTable" Breakpoint="Breakpoint.Sm" OnRowClick="SelectionWorkerChanged" T="EmployeeModel" RowClassFunc="@SelectedRowClassFunc">
+            <br>
+            <MudTable Items="employees" Hover="true" @ref="mudTable" Breakpoint="Breakpoint.Sm" OnRowClick="SelectionWorkerChanged" T="EmployeeModel" RowClassFunc="@SelectedRowClassFunc"
+                    FixedHeader="true" Height="100%">
                     <HeaderContent>
                         <MudTh style="width:200px">ФИО</MudTh>
                     </HeaderContent>
@@ -60,9 +60,9 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups == null)
                         <MudTd DataLabel="ФИО" style="text-align:left">@(context.ФИО.Split(' ')[0] + " " + context.ФИО.Split(' ')[1][0] + '.' + ' ' + context.ФИО.Split(' ')[2][0] + '.')</MudTd>
                     </RowTemplate>
                 </MudTable>
-            </div>
+            </MudContainer>
 
-        </div>
+        </MudPaper>
 }
 else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
 {
@@ -74,7 +74,8 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
                     <MudSelectItem TValue="int" Value="@subdivision.Код">@subdivision.Имя</MudSelectItem>
                 }
             </MudSelect>
-            <MudTable Items="employees" Hover="true" @ref="mudTable" Breakpoint="Breakpoint.Sm" OnRowClick="SelectionWorkerChanged" T="EmployeeModel" RowClassFunc="@SelectedRowClassFunc">
+            <MudTable Items="employees" Hover="true" @ref="mudTable" Breakpoint="Breakpoint.Sm" OnRowClick="SelectionWorkerChanged" T="EmployeeModel" RowClassFunc="@SelectedRowClassFunc" 
+                    FixedHeader="true" Height="available">
                 <HeaderContent>
                     <MudTh style="width:200px">ФИО</MudTh>
                 </HeaderContent>
@@ -84,7 +85,7 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
             </MudTable>
             </div>
             <div class="div2">
-                <MudTable Items="groups" Hover="true" OnRowClick="OpenGroup" T="MainGroupsTableInfoModel" FixedHeader="true" Height="600px">
+                <MudTable Items="groups" Hover="true" OnRowClick="OpenGroup" T="MainGroupsTableInfoModel" FixedHeader="true" FixedFooter="true" Height="available">
                     <HeaderContent>
                         <MudTh>Id</MudTh>
                         <MudTh>Название группы</MudTh>
@@ -131,10 +132,11 @@ else if (subdivisions?.Count > 0 && employees?.Count > 0 && groups?.Count > 0)
     int subdivisionId = 4;
     private int selectedRowNumber = -1;
 
-    private MudTable<EmployeeModel> mudTable;
+    private MudTable<EmployeeModel>? mudTable;
     private List<SubdivisionModel>? subdivisions;
     private List<EmployeeModel>? employees;
     private List<MainGroupsTableInfoModel>? groups;
+    
 
     protected override async Task OnInitializedAsync()
     {

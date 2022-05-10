@@ -32,8 +32,6 @@ builder.Services.AddTransient<IEmployeeData, EmployeeData>();
 builder.Services.AddTransient<IMainGroupsTableData, MainGroupsTableData>();
 builder.Services.AddTransient<IGroupData, GroupData>();
 
-
-
 // Server Side Blazor doesn't register HttpClient by default
 // Нужно для работы MatBlazor
 if (!builder.Services.Any(x => x.ServiceType == typeof(HttpClient)))

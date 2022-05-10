@@ -9,15 +9,11 @@
 
 @if (group == null)
 {
-    <div class="loading-spiner"></div>
+    <div class="loading-spinner"></div>
 }
 else
-{
-    @foreach (var gr in group)
-    {
-        <h4>@gr.Id</h4>
-    }
-    
+{    
+    <h4>@group[0].Id</h4>
 }
 
 
